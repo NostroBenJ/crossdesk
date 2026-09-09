@@ -1,0 +1,49 @@
+==========================================================================
+POWER AUDIT -- the six-family library screen
+==========================================================================
+in-sample sessions   3,521  (14.0 years)
+families tested      6
+corrected threshold  |t| > 2.64
+uncorrected          |t| > 1.96
+
+minimum detectable Sharpe (corrected)    0.706
+minimum detectable Sharpe (uncorrected)  0.524
+
+A design's 'minimum detectable' effect is one it finds HALF the time.
+Power against a literature-strength effect is the honest number:
+
+  hypothesis                            lit SR   power  verdict
+  ------------------------------------ ------- -------  ------------
+  sector momentum (cross-sectional)       0.40   12.7%  UNDERPOWERED
+  time-series momentum / trend            0.50   22.1%  UNDERPOWERED
+  turn of the month                       0.30    6.5%  UNDERPOWERED
+  overnight vs intraday                   0.60   34.6%  UNDERPOWERED
+
+Years of data needed for 80% power at |t| > 2.64:
+  sector momentum (cross-sectional)        76 years
+  time-series momentum / trend             48 years
+  turn of the month                       135 years
+  overnight vs intraday                    34 years
+
+==========================================================================
+THE BREADTH FIX
+==========================================================================
+More years are unavailable. More names are not.
+IR = IC * sqrt(breadth), breadth = names * rebalances * haircut(0.25).
+
+    universe   IC needed   SR at IC=0.03    power
+  ---------- ----------- --------------- --------
+          15      0.1052            0.20     3.0%
+          50      0.0576            0.37    10.3%
+         100      0.0407            0.52    24.3%
+         250      0.0258            0.82    66.7%
+         500      0.0182            1.16    95.6%
+        1000      0.0129            1.64   100.0%
+
+  names needed for 80% power at IC=0.02:      722
+  names needed for 80% power at IC=0.03:      321
+  names needed for 80% power at IC=0.05:      116
+
+Read the IC column as: the per-bet skill this design demands before
+it can see anything. At 15 names it demands more skill per bet than
+any published cross-sectional signal has ever shown.

@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crossdesk"
+version = "0.1.0"
+description = "Cross-sectional alpha on a liquid ETF universe"
+requires-python = ">=3.12"
+# The conventions layer (calendar, funding) depends only on quantdesk, which is
+# itself zero-dependency. Engines are optional and imported inside the module
+# that needs them, so `import crossdesk` works without vectorbt or nautilus.
+dependencies = ["quantdesk"]
+
+[project.optional-dependencies]
+# plotly is pinned BELOW 7 because vectorbt 1.1.0 declares `plotly>=4.12.0`
+# with no upper bound, and plotly 7.0 removed the `scattermapbox` trace that
+# vectorbt's default theme registers at import time. Unpinned, `import
+# vectorbt` raises ValueError. Verified 2026-09-08.
+screen = ["vectorbt>=1.1.0", "plotly>=6.0,<7"]
+engine = ["nautilus_trader>=1.231"]
+dev = ["pytest>=8.0"]
+
+[tool.setuptools.packages.find]
+include = ["crossdesk*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+filterwarnings = ["error::RuntimeWarning"]

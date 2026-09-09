@@ -1,0 +1,58 @@
+==========================================================================
+UNIVERSE AUDIT -- CRSP monthly, ordinary common shares on NYSE/AMEX/NASDAQ
+==========================================================================
+PERMNOs ever listed     18,695
+listing windows         19,374  (15,570 ended)
+month-ends              420  (1990-01-31 .. 2024-12-31)
+Shumway-adjusted exits  28  (delisting code, no delisting return)
+window ends by CRSP delisting code:  200s: 8,502  300s: 137  400s: 300  500s: 5,813  none (filter exit): 818
+loaded in 15s
+
+Guards:
+  [ok] every ended listing carries a terminal return
+  [ok] top-500-by-size membership is causal on 70 sampled dates
+  [ok] no date claims a PERMNO that was not tradable
+  [ok] no member leaves the cross-section unpriced (69 periods checked)
+
+Breadth (all eligible / top-500) at year ends:
+  1990: 5,723/500   1991: 5,763/500   1992: 5,899/500   1993: 6,432/500
+  1994: 6,730/500   1995: 6,963/500   1996: 7,432/500   1997: 7,425/500
+  1998: 6,985/500   1999: 6,647/500   2000: 6,351/500   2001: 5,639/500
+  2002: 5,219/500   2003: 4,886/500   2004: 4,818/500   2005: 4,752/500
+  2006: 4,692/500   2007: 4,596/500   2008: 4,329/500   2009: 4,078/500
+  2010: 3,938/500   2011: 3,778/500   2012: 3,658/500   2013: 3,653/500
+  2014: 3,778/500   2015: 3,750/500   2016: 3,610/500   2017: 3,572/500
+  2018: 3,597/500   2019: 3,580/500   2020: 3,732/500   2021: 4,364/500
+  2022: 4,287/500   2023: 4,020/500   2024: 3,804/500
+
+Return provenance over the sampled 69 periods (full universe):
+  traded     328,461  (95.53%)
+  delisted    15,367  ( 4.47%)
+  missing          0  ( 0.00%)
+
+in-sample  294 month-ends (1990-01-31 .. 2014-06-30)
+holdout    126 month-ends SEALED (2014-07-31 .. 2024-12-31)
+
+==========================================================================
+WHAT THIS PANEL CAN DETECT
+==========================================================================
+  Two columns, because they answer different questions and only one of them has been checked:
+    'law'  power against the Sharpe the Fundamental Law predicts from IC=0.03 at 0.25 haircut
+    'lit'  power against a published cross-sectional Sharpe of 0.40
+
+    universe  IC needed  SR (law)   power    SR (lit)   power   verdict (lit)
+     top 100     0.0308      0.52   47.4%        0.40   25.5%   UNDERPOWERED
+     top 300     0.0178      0.90   96.5%        0.40   25.5%   UNDERPOWERED
+     top 500     0.0138      1.16   99.9%        0.40   25.5%   UNDERPOWERED
+    top 1000     0.0097      1.64  100.0%        0.40   25.5%   UNDERPOWERED
+
+  Six pre-registered families, Bonferroni, in-sample years as above.
+  Compare with results/universe_audit.txt: 15 names, 11.7% power.
+
+  READ THE 'lit' COLUMN, NOT THE 'law' ONE. The law column assumes
+  names x rebalances x 0.25 INDEPENDENT bets. Measured on this panel
+  in results/screen_crsp_families.txt, a 30-name-per-side momentum
+  spread realised an annual Sharpe of 0.36, not the 0.90 the law
+  predicts -- an implied haircut near 0.04. Thirty longs picked by one
+  signal are one factor bet, not thirty, so the law's breadth is the
+  optimistic bound and the literature column is the honest one.

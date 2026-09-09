@@ -1,0 +1,35 @@
+==========================================================================
+SWEEP DEFLATION -- cross-sectional momentum, 15 ETFs
+==========================================================================
+in-sample  168 month-ends (2006-09-29 .. 2020-08-31)
+holdout    73 SEALED, not read by this script
+configurations tried  48
+
+WINNER                 lookback=63d skip=0d quantile=0.4
+monthly Sharpe           0.1297
+annualised Sharpe          0.45
+skew                       0.47
+kurtosis (non-excess)      4.95
+observations                167
+
+PSR (one hypothesis)                 95.6%
+spread of trial Sharpes (var)      0.00065
+DSR (deflated for 48 trials)         82.8%
+
+PBO                                  69.0%   SELECTION IS NOISE
+  partitions                           252
+  winner mean OOS rank               0.389
+  P(winner loses OOS)                37.3%
+  IS->OOS slope (biased, see doc)   -0.791
+
+==========================================================================
+READING THIS
+==========================================================================
+PBO's pure-noise baseline is ~0.60, not 0.50 -- selecting the best
+in-sample Sharpe is worse than random because the criterion rewards
+low in-sample volatility, which does not persist. Compare against
+0.60, not against 0.50.
+
+The gap between PSR and DSR is the cost of having searched. It is
+the number `grade_strategy()` could not produce, because it assumes
+one pre-registered hypothesis and this was 48 of them.

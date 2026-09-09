@@ -1,0 +1,41 @@
+==========================================================================
+UNIVERSE AUDIT -- ETF daily panel
+==========================================================================
+tickers ever listed   15
+trading dates         5,030  (2006-09-05 .. 2026-09-02)
+month-end rebalances  241
+
+Guards:
+  [ok] every ended listing carries a terminal return  (trivially: none has ended)
+  [ok] membership is causal on all 241 rebalance dates
+  [ok] no date claims a symbol that was not tradable
+  [ok] no member leaves the cross-section unpriced
+
+Breadth over time (members at each year end):
+  2006: 15   2007: 15   2008: 15   2009: 15   2010: 15
+  2011: 15   2012: 15   2013: 15   2014: 15   2015: 15
+  2016: 15   2017: 15   2018: 15   2019: 15   2020: 15
+  2021: 15   2022: 15   2023: 15   2024: 15   2025: 15
+  2026: 15
+
+Return provenance across all monthly periods:
+  traded      3,600  (100.00%)
+  delisted        0  ( 0.00%)
+  missing         0  ( 0.00%)
+
+in-sample  168 rebalances (2006-09-29 .. 2020-08-31)
+holdout    73 rebalances SEALED (2020-09-30 .. 2026-09-02)
+
+==========================================================================
+WHAT THIS PANEL CAN DETECT
+==========================================================================
+names at the in-sample cut   15
+in-sample years              14.0
+IC required to clear |t|>1.96   0.0781
+Sharpe at a realistic IC=0.03      0.20
+power against that Sharpe          11.7%
+
+Read this as the ceiling on the current data, not a forecast. Even
+uncorrected, and even before costs, fifteen names cannot support a
+cross-sectional test. The data layer is now correct; it is not yet
+wide enough. See results/power_audit.txt for the breadth table.

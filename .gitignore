@@ -1,0 +1,21 @@
+__pycache__/
+*.py[cod]
+.venv/
+.venv-qlib/
+*.egg-info/
+
+# ---------------------------------------------------------------------------
+# Vendor data. NEVER COMMITTED, for two independent reasons.
+#
+# 1. CRSP is licensed through WRDS. Redistributing an extract -- including by
+#    pushing it to a repository -- is a licence violation, and it does not stop
+#    being one because the repository is private.
+# 2. crsp_monthly.csv is 135MB and regenerable in minutes:
+#       cd dev/cisd-bot && .venv-qlib/python -m research.wrds_pull --pull
+#       cd crossdesk && python scripts/crsp_import.py
+#    See data/README.md and the CRSP section of CLAUDE.md.
+# ---------------------------------------------------------------------------
+data/*.csv
+
+# A test run is not a finding. The tests are in tests/.
+results/pytest_full.txt

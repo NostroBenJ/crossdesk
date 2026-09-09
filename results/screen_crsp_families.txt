@@ -1,0 +1,119 @@
+==============================================================================
+CRSP LIBRARY FAMILIES -- pre-registered, in-sample only
+==============================================================================
+universe        top 300 by market cap, rebalanced monthly
+panel           18,695 PERMNOs, 19,374 listing windows
+in-sample       294 month-ends  (1990-01-31 .. 2014-06-30)   24.5 years
+holdout         126 month-ends SEALED (2014-07-31 .. 2024-12-31)
+threshold       |t| > 2.64 (Bonferroni across the registered family of 6)
+                |t| > 2.24 would be the bar for the two actually run; the stricter one is used
+costs           10bp round trip per name, on actual turnover
+
+==============================================================================
+L5 cross-sectional momentum
+==============================================================================
+  prior (registered in advance): POSITIVE: top 30 minus bottom 30 on 12-month return
+
+  months 281   mean names ranked 296   mean cost basis 0.61   unscored name-months 1,225
+  held-leg provenance: delisted 89 (0.53%)  traded 16,771 (99.47%)
+
+            mean bp/mo       se        t                 95% CI    ann %   ann SR
+  gross         +94.12    53.36    +1.76   [  -10.46,  +198.71]   +11.29    +0.36
+  net           +88.05    53.36    +1.65   [  -16.53,  +192.64]   +10.57    +0.34
+
+  legs: long +154.08 bp/mo   short +59.96 bp/mo
+
+  cost sensitivity (round trip per name, charged on turnover):
+        bp   mean bp/mo        t
+         0       +94.12    +1.76
+         5       +91.09    +1.71
+        10       +88.05    +1.65
+        20       +81.99    +1.54
+        30       +75.92    +1.42
+        50       +63.78    +1.20
+    survives every cost tested (up to 50bp)
+
+  the wrong statistic, for scale: pooling 296 names x 281 months as independent draws would report t = +30.40
+
+  path of each leg (DESCRIPTIVE): max drawdown 61.3% vs 85.7%   monthly vol 7.27% vs 7.57%
+
+  net monthly Sharpe +0.0986  skew +0.49  kurtosis 10.42 (normal = 3)
+  PSR  P(true Sharpe > 0) = 95.3%
+  power against a literature Sharpe of 0.40: 25.5%  -> UNDERPOWERED
+
+  by decade (DESCRIPTIVE -- not a test, and not corrected):
+    1990s  n=107  net  +167.91 bp/mo  t= +2.65
+    2000s  n=120  net   +46.37 bp/mo  t= +0.43
+    2010s  n= 54  net   +22.48 bp/mo  t= +0.37
+
+==============================================================================
+L6 trend following
+==============================================================================
+  prior (registered in advance): WEAK: the published claim for the 10-month rule is drawdown reduction, not return
+
+  months 284   mean names ranked 297   mean cost basis 0.70   unscored name-months 910
+  held-leg provenance: delisted 238 (0.28%)  traded 84,052 (99.72%)
+
+            mean bp/mo       se        t                 95% CI    ann %   ann SR
+  gross         -26.00    15.59    -1.67   [  -56.55,    +4.54]    -3.12    -0.34
+  net           -32.96    15.58    -2.12   [  -63.49,    -2.43]    -3.96    -0.43
+
+  legs: long +75.31 bp/mo   short +101.31 bp/mo
+
+  cost sensitivity (round trip per name, charged on turnover):
+        bp   mean bp/mo        t
+         0       -26.00    -1.67
+         5       -29.48    -1.89
+        10       -32.96    -2.12
+        20       -39.91    -2.56
+        30       -46.87    -3.01
+        50       -60.78    -3.91
+    negative before any cost is charged -- costs are not what is wrong with it
+
+  the wrong statistic, for scale: pooling 297 names x 284 months as independent draws would report t = -28.81
+
+  path of each leg (DESCRIPTIVE): max drawdown 23.8% vs 52.3%   monthly vol 2.58% vs 4.34%
+
+  net monthly Sharpe -0.1258  skew +0.62  kurtosis 11.33 (normal = 3)
+  PSR  P(true Sharpe > 0) = 2.3%
+  power against a literature Sharpe of 0.40: 25.5%  -> UNDERPOWERED
+
+  by decade (DESCRIPTIVE -- not a test, and not corrected):
+    1990s  n=110  net   -61.69 bp/mo  t= -4.41
+    2000s  n=120  net    +4.14 bp/mo  t= +0.13
+    2010s  n= 54  net   -56.88 bp/mo  t= -1.88
+
+==============================================================================
+DID THE BREADTH FIX DELIVER WHAT THE POWER AUDIT PREDICTED?
+==============================================================================
+  predicted annual Sharpe at IC=0.03, 300 names, haircut 0.25     0.90
+  measured annual Sharpe, L5 gross                                  0.36
+  -> implied IC at the assumed 0.25 haircut                       0.0122
+  -> implied haircut at the assumed IC of 0.03                     0.041
+
+  The Fundamental Law counts INDEPENDENT bets. Thirty longs and thirty shorts chosen by
+  one signal are not sixty bets, they are one factor bet held sixty ways, and the monthly
+  series is what the design actually gets to average over. The 0.25 haircut in power.py
+  is far too generous for a cross-sectional factor; measured here it is nearer 0.04.
+
+  Consequence for the audit: `results/crsp_audit.txt` reports 96.5% power for 300 names,
+  which is power against a Sharpe of 0.90 that this universe does not produce. Power against
+  the LITERATURE effect of 0.40 is what the family reports above, and it is far lower.
+  Minimum detectable annual Sharpe at |t|>2.64 over 24.5 years: 0.53.
+
+==============================================================================
+VERDICT
+==============================================================================
+  L5  net   +88.05 bp/mo  t= +1.65  ann SR +0.34  PSR  95.3%  DSR  21.2%   fails 2.64  (and fails an uncorrected 1.96)
+  L6  net   -32.96 bp/mo  t= -2.12  ann SR -0.43  PSR   2.3%  DSR   0.0%   fails 2.64
+
+  DSR here deflates against the expected best of 6 trials using a Sharpe variance of 0.012587, estimated from the 2 families this screen ran.
+  That estimate is the weakest input in the procedure and it is stated rather than buried: with two trials it is barely an estimate.
+  It is also not the primary correction. Nothing was SELECTED here -- both hypotheses were
+  registered before the data existed -- so Bonferroni across the family is the instrument that
+  applies, and DSR is reported as a cross-check, not as the verdict.
+
+  Nothing clears the corrected threshold.
+
+  Holdout untouched. Anything above is in-sample and stays that way until a
+  pre-registered out-of-sample test is written for whatever survived, if anything.
