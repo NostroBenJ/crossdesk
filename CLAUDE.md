@@ -313,11 +313,84 @@ instead of -2.12. Every statistic in `screen/families.py` is therefore the
 monthly portfolio series: names averaged first, one observation per month,
 non-overlapping so no further correction is needed.
 
+## The three momentum variants (2026-09-09) — one rejection, two nulls
+
+`scripts/screen_crsp_variants.py`, output in `results/screen_crsp_variants.txt`,
+engine in `crossdesk/screen/variants.py`, 17 tests in `tests/test_variants.py`.
+Pre-registered, in-sample only, same universe and costs as the families screen.
+
+Three PUBLISHED responses to the momentum crash, chosen because each answers a
+specific symptom the families screen measured, and none of them is a sweep:
+
+| | net bp/mo | t | ann SR | vs baseline z | bootstrap p |
+|---|---:|---:|---:|---:|---:|
+| L5 baseline, common window | +81.82 | +1.42 | +0.31 | — | — |
+| V1 residual momentum (BHM 2011) | +62.19 | +1.60 | +0.35 | +0.33 | 0.739 |
+| V2 vol-scaled (Barroso-SC 2015) | +45.64 | +1.73 | +0.38 | +0.68 | 0.490 |
+| V3 inverse-vol weighting | +57.74 | +1.01 | +0.22 | **−3.67** | **0.000** |
+
+**V3 is REJECTED, and it is the only significant result in the run.** Paired
+mean difference −24.08 bp/mo, t = −3.83, over 257 months with the two series
+99.4% correlated. Inverse-volatility weighting reliably makes the spread worse.
+Do not re-propose it; the low-vol tilt it induces is a worse portfolio than
+equal weight, measured, not argued.
+
+**V1 and V2 are nulls, not failures.** Both nudge Sharpe up and neither is
+distinguishable from the baseline. Nothing clears |t| > 2.77.
+
+**V2's PATH claim is the one thing that did show up**, and it is descriptive
+rather than tested — the paper's own registered contribution is the shape of
+the distribution, not the mean:
+
+```
+                       max drawdown   kurtosis
+L5 baseline (V2 window)      70.8%       9.61
+V2 volatility-scaled         27.7%       5.27
+```
+
+It buys that by holding LESS: mean scale 0.66x, above 1.0x in only 41 of 245
+months, max 1.43x, never touching the 2.0x cap. So the mechanism is
+implementable in a cash account, and a risk rule that cuts a 70.8% drawdown to
+27.7% does not need to clear a significance bar to earn its place — it is not
+claiming alpha. V1 also improved the path (42.9%).
+
+**The decade decay survives all three**, including V1's negative 2010s
+(−23.41 bp/mo) against the baseline's +22.48.
+
+Two things about the design, both load-bearing:
+
+- **The engine reproduces its own baseline exactly.** `spread()` is
+  `cross_sectional_momentum` with the score and the weights lifted out; handed
+  the registered rules it returns +88.05 bp/mo and t = +1.65 on the real panel,
+  matching `screen_crsp_families.py` to the reported precision.
+  `test_generalised_engine_reproduces_the_registered_l5` pins it on a fixture
+  panel WITH delistings. Without this every "improvement" would be partly a
+  second unnoticed change — the failure mode that cost the sibling `cisd-bot`
+  five silent divergences.
+- **Head-to-head uses Jobson-Korkie with Memmel's correction**, because these
+  are the same strategy modified and their series correlate 0.82–0.99. An
+  unpaired Sharpe comparison would have a standard error several times too
+  large. The closed form is checked against a paired bootstrap in the tests
+  rather than trusted.
+
+**TRIAL COUNT ON THIS PANEL IS NOW NINE.** Six families plus these three. The
+verdict bar used |t| > 2.77 for that reason, and any future test here inherits
+the count. Power against a literature Sharpe of 0.40 remains **21.4%**, so
+every null in this table is "cannot tell", not "does not work" — and no further
+in-sample test can fix that. Only forward data or a genuinely higher-Sharpe
+signal changes the answer.
+
 ## Holdout
 
 The last **30%** is SEALED, matching every screen in quantdesk. On the ETF panel
-that is 2020-09-30 onward, 73 of 241 month-ends. Scripts that touch it say so in
-their module docstring. Nothing in this repo reads it yet.
+that is 2020-09-30 onward, 73 of 241 month-ends; on CRSP it is 2014-07-31
+onward, 126 month-ends. Scripts that touch it say so in their module docstring.
+Nothing in this repo reads it yet.
+
+As of 2026-09-09 there are **three registered candidates** that could be taken
+to it: L5 baseline, V1 and V2. It is a one-shot resource — once a candidate is
+tested there it can never be a clean out-of-sample test again — so what result
+would change the decision gets written down BEFORE it is opened, not after.
 
 ## Environments
 

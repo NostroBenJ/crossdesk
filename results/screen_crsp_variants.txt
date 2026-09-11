@@ -1,0 +1,178 @@
+==============================================================================
+CRSP MOMENTUM VARIANTS -- pre-registered, in-sample only
+==============================================================================
+universe        top 300 by market cap, rebalanced monthly
+panel           18,695 PERMNOs, 19,374 listing windows
+in-sample       294 month-ends  (1990-01-31 .. 2014-06-30)   24.5 years
+holdout         126 month-ends SEALED (2014-07-31 .. 2024-12-31)
+threshold       |t| > 2.39 across the 3 registered here
+                |t| > 2.77 across all 9 this panel has seen  <- the verdict uses this one
+costs           10bp round trip per name, on actual turnover
+common start    index 36 (1993-01-29) -- the history V1 and V3 require
+
+building monthly return matrix for 987 names ever in the top 300 ...
+market proxy: equal-weighted members, 293 of 293 months priced
+
+==============================================================================
+BASELINE, for continuity with the families screen
+==============================================================================
+  full window    n=281  net   +88.05 bp/mo  t= +1.65  ann SR +0.34   <- reproduces the +1.65 on record
+  common window  n=257  net   +81.82 bp/mo  t= +1.42  ann SR +0.31   <- what the variants are measured against
+
+  the 24 months of difference are the history V1 and V3 spend before they can rank.
+  Any change in the baseline between these two rows belongs to the SAMPLE, not to a variant.
+
+  baseline path on the common window: max drawdown 70.8%   skew +0.49   kurtosis 9.91
+  baseline path on V2's window:      max drawdown 70.8%   skew +0.50   kurtosis 9.61
+
+==============================================================================
+V1 residual momentum (Blitz-Huij-Martens)
+==============================================================================
+  prior (registered in advance): POSITIVE, and a higher risk-adjusted spread than raw momentum
+
+  months 257   mean names ranked 286   mean cost basis 0.71   unscored name-months 3,525
+  held-leg provenance: delisted 56 (0.36%)  traded 15,364 (99.64%)
+
+            mean bp/mo       se        t                 95% CI    ann %   ann SR
+  gross         +69.28    38.76    +1.79   [   -6.68,  +145.25]    +8.31    +0.39
+  net           +62.19    38.77    +1.60   [  -13.79,  +138.18]    +7.46    +0.35
+
+  legs: long +131.44 bp/mo   short +62.16 bp/mo
+
+  cost sensitivity (round trip per name, charged on turnover):
+        bp   mean bp/mo        t
+         0       +69.28    +1.79
+         5       +65.74    +1.70
+        10       +62.19    +1.60
+        20       +55.10    +1.42
+        30       +48.02    +1.24
+        50       +33.84    +0.87
+    survives every cost tested (up to 50bp)
+
+  path of each leg (DESCRIPTIVE): max drawdown 51.3% vs 74.9%   monthly vol 5.45% vs 6.28%
+  spread max drawdown 42.9%
+
+  net monthly Sharpe +0.1003  skew +0.32  kurtosis 9.79 (normal = 3)
+  PSR  P(true Sharpe > 0) = 94.7%
+  power against a literature Sharpe of 0.40: 21.4%  -> UNDERPOWERED
+
+  by decade (DESCRIPTIVE -- not a test, and not corrected):
+    1990s  n= 83  net  +111.44 bp/mo  t= +2.08
+    2000s  n=120  net   +66.66 bp/mo  t= +0.93
+    2010s  n= 54  net   -23.41 bp/mo  t= -0.51
+
+  vs baseline over the 257 shared months (1993-02-26 .. 2014-06-30):
+    variant     +62.19 bp/mo   ann SR +0.35
+    baseline    +81.82 bp/mo   ann SR +0.31
+    paired mean difference   -19.63 bp/mo  se 32.59  t = -0.60
+    monthly Sharpe difference +0.0117   correlation +0.844
+    Jobson-Korkie/Memmel  z = +0.33      paired bootstrap  p = 0.739
+
+==============================================================================
+V2 volatility-scaled momentum
+==============================================================================
+  prior (registered in advance): HIGHER SHARPE and lower kurtosis; a null on mean return does not refute it
+
+  months 245   mean names ranked 295   mean cost basis 0.40   unscored name-months 1,162
+  held-leg provenance: delisted 86 (0.56%)  traded 15,334 (99.44%)
+
+            mean bp/mo       se        t                 95% CI    ann %   ann SR
+  gross         +49.64    26.30    +1.89   [   -1.91,  +101.20]    +5.96    +0.42
+  net           +45.64    26.31    +1.73   [   -5.93,   +97.20]    +5.48    +0.38
+
+  legs: long +112.78 bp/mo   short +63.14 bp/mo
+
+  cost sensitivity (round trip per name, charged on turnover):
+        bp   mean bp/mo        t
+         0       +49.64    +1.89
+         5       +47.64    +1.81
+        10       +45.64    +1.73
+        20       +41.63    +1.58
+        30       +37.62    +1.43
+        50       +29.60    +1.12
+    survives every cost tested (up to 50bp)
+
+  path of each leg (DESCRIPTIVE): max drawdown 22.5% vs 44.9%   monthly vol 4.12% vs 4.00%
+  spread max drawdown 27.7%
+
+  net monthly Sharpe +0.1111  skew +0.23  kurtosis 5.27 (normal = 3)
+  PSR  P(true Sharpe > 0) = 96.0%
+  power against a literature Sharpe of 0.40: 21.4%  -> UNDERPOWERED
+
+  scale path: mean 0.66x  max 1.43x  months at the 2.0x cap 0  months above 1.0x 41 of 245
+  a scale above 1.0 is BORROWING, which the cash account this feeds cannot do.
+
+  by decade (DESCRIPTIVE -- not a test, and not corrected):
+    1990s  n= 71  net   +61.69 bp/mo  t= +1.16
+    2000s  n=120  net   +45.73 bp/mo  t= +1.22
+    2010s  n= 54  net   +24.30 bp/mo  t= +0.48
+
+  vs baseline over the 245 shared months (1994-02-28 .. 2014-06-30):
+    variant     +45.64 bp/mo   ann SR +0.38
+    baseline    +79.68 bp/mo   ann SR +0.29
+    paired mean difference: NOT REPORTED -- scaling changes the position size, so a difference in bp/mo would measure leverage, not skill
+    monthly Sharpe difference +0.0265   correlation +0.817
+    Jobson-Korkie/Memmel  z = +0.68      paired bootstrap  p = 0.490
+
+==============================================================================
+V3 inverse-volatility weighting
+==============================================================================
+  prior (registered in advance): LOWER volatility and a higher Sharpe at a similar mean
+
+  months 257   mean names ranked 295   mean cost basis 0.67   unscored name-months 1,162
+  held-leg provenance: delisted 86 (0.56%)  traded 15,334 (99.44%)
+
+            mean bp/mo       se        t                 95% CI    ann %   ann SR
+  gross         +64.49    57.22    +1.13   [  -47.65,  +176.64]    +7.74    +0.24
+  net           +57.74    57.22    +1.01   [  -54.41,  +169.89]    +6.93    +0.22
+
+  legs: long +128.01 bp/mo   short +63.52 bp/mo
+
+  cost sensitivity (round trip per name, charged on turnover):
+        bp   mean bp/mo        t
+         0       +64.49    +1.13
+         5       +61.12    +1.07
+        10       +57.74    +1.01
+        20       +51.00    +0.89
+        30       +44.25    +0.77
+        50       +30.75    +0.54
+    survives every cost tested (up to 50bp)
+
+  path of each leg (DESCRIPTIVE): max drawdown 58.9% vs 81.7%   monthly vol 6.96% vs 7.46%
+  spread max drawdown 74.9%
+
+  net monthly Sharpe +0.0631  skew +0.43  kurtosis 10.38 (normal = 3)
+  PSR  P(true Sharpe > 0) = 84.6%
+  power against a literature Sharpe of 0.40: 21.4%  -> UNDERPOWERED
+
+  by decade (DESCRIPTIVE -- not a test, and not corrected):
+    1990s  n= 83  net  +142.04 bp/mo  t= +1.95
+    2000s  n=120  net   +24.07 bp/mo  t= +0.22
+    2010s  n= 54  net    +3.02 bp/mo  t= +0.05
+
+  vs baseline over the 257 shared months (1993-02-26 .. 2014-06-30):
+    variant     +57.74 bp/mo   ann SR +0.22
+    baseline    +81.82 bp/mo   ann SR +0.31
+    paired mean difference   -24.08 bp/mo  se 6.29  t = -3.83
+    monthly Sharpe difference -0.0254   correlation +0.994
+    Jobson-Korkie/Memmel  z = -3.67      paired bootstrap  p = 0.000
+
+==============================================================================
+VERDICT
+==============================================================================
+                                      net bp/mo       t  ann SR     PSR     DSR  verdict
+  L5 baseline (common window)            +81.82   +1.42   +0.31                  reference, not a new trial
+  V1 residual momentum                   +62.19   +1.60   +0.35  94.7%  86.6%  fails 2.77
+  V2 volatility-scaled                   +45.64   +1.73   +0.38  96.0%  89.5%  fails 2.77
+  V3 inverse-vol weighting               +57.74   +1.01   +0.22  84.6%  69.6%  fails 2.77
+
+  DSR deflates against the expected best of 9 trials using a Sharpe variance of 0.000425, estimated from the 4 series here.
+  That estimate is the weakest input in the procedure, and these series are strongly
+  correlated modifications of one strategy, so their disagreement understates the
+  disagreement across genuinely independent trials. DSR is a cross-check here, not the verdict.
+
+  The head-to-head z above is the statistic that answers the question actually asked:
+  not 'does this variant make money' but 'is it BETTER than the momentum already measured'.
+
+  Holdout untouched. Everything above is in-sample and stays that way until a
+  pre-registered out-of-sample test is written for whatever survived, if anything.
