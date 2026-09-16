@@ -59,10 +59,10 @@ python scripts/screen_crsp_families.py
 python scripts/screen_crsp_variants.py
 ```
 
-Two things this repo can't include:
+Before running the tests:
 - **CRSP data** is licensed through WRDS and never committed. `scripts/crsp_import.py` builds the panel
   from your own WRDS extract; see [`data/README.md`](data/README.md).
-- **`quantdesk`**, the backtesting package it depends on, is a separate private project, so the engine
-  comparison and the crypto conventions tests won't import without it.
+- **Engines.** The engine-agreement tests need [`quantdesk`](https://github.com/NostroBenJ/quantdesk)
+  on the path, plus VectorBT and Nautilus Trader installed (they live in a separate venv; see `pyproject.toml`).
 
 Research code for learning, not investment advice.
